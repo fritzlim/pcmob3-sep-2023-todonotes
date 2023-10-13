@@ -1,9 +1,29 @@
 import { NavigationContainer } from "@react-navigation/native";
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { createStackNavigator, HeaderTitle } from "@react-navigation/stack";
+import React, { useEffect } from "react";
+import { StyleSheet, View, Pressable } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Entypo } from "@expo/vector-icons";
 
 function NotesScreen({ navigation }) {
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable onPress={addNote} style={styles.headerIcon}>
+          <Entypo
+            name="new-message"
+            size={24}
+            color="black"
+            style={{ marginRight: 20 }}
+          />
+        </Pressable>
+      ),
+    });
+  });
+
+  function addNote() {
+    console.log("Add Note");
+  }
+
   return <View style={styles.container}></View>;
 }
 
