@@ -116,6 +116,13 @@ export default function App() {
       {/* **** Using 2 groups of screens. **** */}
       {/* See https://reactnavigation.org/docs/modal/#creating-a-stack-with-modal-screens */}
       <Stack.Navigator>
+        <Stack.Group>
+          <Stack.Screen
+            name="Notes Stack"
+            component={NotesStack}
+            options={{ headerShown: false }}
+          />
+        </Stack.Group>
         <Stack.Group
           screenOptions={{ presentation: "modal", headerShown: false }}
         >
@@ -123,13 +130,6 @@ export default function App() {
             name="Add Note"
             component={AddScreen}
             // options={{ presentation: "modal", headerShown: false }}
-          />
-        </Stack.Group>
-        <Stack.Group>
-          <Stack.Screen
-            name="Notes Stack"
-            component={NotesStack}
-            options={{ headerShown: false }}
           />
         </Stack.Group>
       </Stack.Navigator>
