@@ -7,10 +7,7 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("notes.db");
 
 function NotesScreen({ navigation, route }) {
-  const [notes, setNotes] = useState([
-    { title: "Walk the cat", done: false, id: "0" },
-    { title: "Feed the elephant", done: false, id: "1" },
-  ]);
+  const [notes, setNotes] = useState([]);
 
   function refreshNotes() {
     db.transaction((tx) => {
