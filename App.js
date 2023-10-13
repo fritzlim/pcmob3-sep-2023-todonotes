@@ -1,10 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import * as SQLite from "expo-sqlite";
 import NotesStack from "./components/NotesStack";
 import AddScreen from "./components/AddScreen";
-
-const db = SQLite.openDatabase("notes.db");
 
 const Stack = createStackNavigator();
 
@@ -47,12 +44,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#ffc",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });

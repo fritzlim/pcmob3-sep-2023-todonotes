@@ -2,12 +2,26 @@ import { useState, useEffect } from "react";
 import { View, FlatList, Text, Pressable } from "react-native";
 import styles from "../styles/styles";
 import { Entypo } from "@expo/vector-icons";
+import * as SQLite from "expo-sqlite";
+
+const db = SQLite.openDatabase("notes.db");
 
 function NotesScreen({ navigation, route }) {
   const [notes, setNotes] = useState([
     { title: "Walk the cat", done: false, id: "0" },
     { title: "Feed the elephant", done: false, id: "1" },
   ]);
+
+  function refreshNotes() {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "select * from notes",
+        null,
+        (_, { rows: { _array } }) => setNotes(_array),
+        (_, error) => console.log("Error: ", error)
+      );
+    });
+  }
 
   useEffect(() => {
     navigation.setOptions({
@@ -26,14 +40,34 @@ function NotesScreen({ navigation, route }) {
 
   useEffect(() => {
     if (route.params?.text) {
-      const newNote = {
-        title: route.params.text,
-        done: false,
-        id: notes.length.toString(),
-      };
-      setNotes([...notes, newNote]);
+      db.transaction(
+        (tx) => {
+          tx.executeSql("insert into notes (done, title) values (0, ?)", [
+            route.params.text,
+          ]);
+        },
+        null,
+        refreshNotes
+      );
     }
   }, [route.params?.text]);
+
+  useEffect(() => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          `CREATE TABLE IF NOT EXISTS
+        notes
+        (id INTEGER PRIMARY KEY AUTOINCREMENT,
+          title TEXT,
+          done INT);
+        `
+        );
+      },
+      null,
+      refreshNotes
+    );
+  }, []);
 
   function addNote() {
     navigation.navigate("Add Note");
