@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
-import React, { useEffect } from "react";
-import { StyleSheet, View, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Pressable, FlatList, Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Entypo } from "@expo/vector-icons";
 import * as SQLite from "expo-sqlite";
@@ -8,10 +8,15 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("notes.db");
 
 function NotesScreen({ navigation }) {
+  const [notes, setNotes] = useState([
+    { title: "Walk the cat", done: false, id: "0" },
+    { title: "Feed the elephant", done: false, id: "1" },
+  ]);
+
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Pressable onPress={addNote} style={styles.headerIcon}>
+        <Pressable onPress={addNote}>
           <Entypo
             name="new-message"
             size={24}
@@ -24,10 +29,39 @@ function NotesScreen({ navigation }) {
   });
 
   function addNote() {
-    console.log("Add Note");
+    let newNote = {
+      title: "Sample new note",
+      done: false,
+      id: notes.length.toString(),
+    };
+    setNotes([...notes, newNote]);
   }
 
-  return <View style={styles.container}></View>;
+  function renderItem({ item }) {
+    return (
+      <View
+        style={{
+          padding: 10,
+          paddingTop: 20,
+          paddingBottom: 20,
+          borderBottomColor: "#ccc",
+          borderBottomWidth: 1,
+        }}
+      >
+        <Text style={{ textAlign: "left", fontSize: 16 }}>{item.title}</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        style={{ width: "100%" }}
+        data={notes}
+        renderItem={renderItem}
+      />
+    </View>
+  );
 }
 
 const Stack = createStackNavigator();
