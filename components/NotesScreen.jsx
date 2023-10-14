@@ -14,8 +14,8 @@ function NotesScreen({ navigation, route }) {
       tx.executeSql(
         "select * from notes",
         null,
-        (_, { rows: { _array } }) => setNotes(_array),
-        (_, error) => console.log("Error: ", error)
+        (_, { rows: { _array } }) => setNotes(_array), // success callback
+        (_, error) => console.log("Error: ", error) // error callback
       );
     });
   }
@@ -43,8 +43,8 @@ function NotesScreen({ navigation, route }) {
             route.params.text,
           ]);
         },
-        null,
-        refreshNotes
+        null, // error callback
+        refreshNotes // success callback
       );
     }
   }, [route.params?.text]);
